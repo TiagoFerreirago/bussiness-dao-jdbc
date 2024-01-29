@@ -27,7 +27,7 @@ public class DB {
 		return conn;
 	}
 	private static Properties loadProperties() {
-		try(FileInputStream fi = new FileInputStream("db.propeties")){
+		try(FileInputStream fi = new FileInputStream("db.properties")){
 			Properties pt = new Properties();
 			pt.load(fi);
 			return pt;
