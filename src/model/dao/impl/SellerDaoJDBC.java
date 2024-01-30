@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -86,19 +87,64 @@ public class SellerDaoJDBC implements SellerDao {
 			DB.closeStatement(st);
 		}
 	}
-	
-	
-	@Override
-	public List<Seller> findAll() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
 	@Override
 	public List<Seller> findByDepartment(Department department) {
-		// TODO Auto-generated method stub
-		return null;
+		PreparedStatement  st = null;
+		ResultSet rs= null;
+		try {
+			st = conn.prepareStatement("SELECT seller.*,department.Name as DepName "+
+										"FROM seller INNER JOIN department "+
+										"ON seller.DepartmentId = department.Id "+
+										"WHERE DepartmentId = ? "+
+										"ORDER BY Name");
+			st.setInt(1, department.getId());
+			
+			rs = st.executeQuery();
+			
+			List<Seller> list = new ArrayList<>();
+			Map<Integer, Department> map = new HashMap<>();
+			while(rs.next()) {
+				Department dep = map.get(rs.getInt("DepartmentId"));
+				if(dep == null) {
+				dep = impDepartment(rs);
+				map.put(rs.getInt("DepartmentId"), dep);
+				}
+				Seller seller = impSeller(rs, dep);
+				list.add(seller);
+			}
+			return list;
+		
 	}
-
+		catch(SQLException e) {
+			throw new DbException(e.getMessage());
+		}
+	}
 	
+		
+	@Override
+	public List<Seller> findAll() {
+		Statement stan = null;
+		ResultSet result = null;
+		
+		try {
+			
+				stan = conn.createStatement();
+				result = stan.executeQuery("SELECT seller.*,department.Id AS Id,department.Name AS DepName "+
+										"From seller INNER JOIN department "+
+										"ON seller.DepartmentId = department.Id "+
+										"ORDER BY seller.Id");
+				
+				List<Seller> list= new ArrayList<>();
+				while(result.next()) {
+					Department dp = impDepartment(result);
+					Seller seller = impSeller(result, dp);
+					list.add(seller);
+				}
+				return list;
+		}
+		
+		catch(SQLException e) {
+			throw new DbException (e.getMessage());
+		}
+	}
 }
