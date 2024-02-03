@@ -9,3 +9,5 @@ public class FactoryDao {
 		return new SellerDaoJDBC(DB.getConnection());
 	}
 }
+	
+	

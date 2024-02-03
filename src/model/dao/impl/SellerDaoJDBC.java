@@ -9,7 +9,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import db.DB;
 import db.DbException;
 import model.dao.SellerDao;
@@ -26,19 +25,40 @@ public class SellerDaoJDBC implements SellerDao {
 	
 	@Override
 	public void insert(Seller sl) {
-		// TODO Auto-generated method stub
-		
-	}
 
+	}
 	@Override
 	public void update(Seller sl) {
-		// TODO Auto-generated method stub
 		
+		PreparedStatement st = null;
+		
+		try {
+			
+			st = conn.prepareStatement("UPDATE seller "+
+										"SET Name = ?, Email = ?, BirthDate = ?, BaseSalary = ?, DepartmentId = ? "+
+										"WHERE Id = ?");
+		
+			st.setString(1,sl.getName());
+			st.setString(2,sl.getEmail());
+			st.setDate(3, new java.sql.Date(sl.getBirthDate().getTime()));
+			st.setDouble(4, sl.getBaseSalary());
+			st.setInt(5, sl.getDepartment().getId());
+			st.setInt(6, sl.getId());
+			System.out.print("Modifield"+ st.executeUpdate());
+		
+		
+		}
+		catch(SQLException e) {
+			throw new DbException(e.getMessage());
+		}
+		
+		finally {
+		  DB.closeStatement(st);
+		}
 	}
 
 	@Override
 	public void deleteById(Integer id) {
-		// TODO Auto-generated method stub
 		
 	}
 	public Department impDepartment(ResultSet rs) throws SQLException {
@@ -77,7 +97,7 @@ public class SellerDaoJDBC implements SellerDao {
 				Seller sl = impSeller(rs, department);
 				return sl;
 			}
-			return null;
+		return null;
 		}
 		catch(SQLException e) {
 			throw new DbException(e.getMessage());

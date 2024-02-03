@@ -1,5 +1,6 @@
 package application;
 
+import java.util.Date;
 import java.util.List;
 
 import model.dao.FactoryDao;
@@ -12,15 +13,29 @@ public class Program {
 	public static void main(String[] args) {
 		
 		SellerDao sellerDao = FactoryDao.createSellerDao();
-		Seller seller = sellerDao.findById(1);
-		System.out.println(seller);
+		
+		
 		Department dep = new Department(3, null);
+		//insert
+		//Seller seller = new Seller(null,"ruma","livia@gmail.com",new Date(),2000.00,dep);
 		
-		List<Seller> list = sellerDao.findAll();
+		//update
+		/*Seller slnew = sellerDao.findById(14);
+		slnew.setName("Cotiude");
+		sellerDao.update(slnew);*/
 		
-		for(Seller obj : list) {
-			System.out.println(obj);
-		}
+		//delete
+		//sellerDao.deleteById(14);
+		
+		//findbyid
+		//System.out.print(sellerDao.findById(1));
+		
+		//findbydepartment
+		//System.out.print(sellerDao.findByDepartment(dep));
+		
+		//findall
+		
+		System.out.print(sellerDao.findAll());
 
 	}
 
