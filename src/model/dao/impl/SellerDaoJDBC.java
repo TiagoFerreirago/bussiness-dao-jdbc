@@ -23,9 +23,42 @@ public class SellerDaoJDBC implements SellerDao {
 		this.conn= cn;
 	}
 	
-	@Override
 	public void insert(Seller sl) {
 
+		PreparedStatement ps = null;
+		try {
+			ps = conn.prepareStatement("INSERT INTO seller "+
+									   "(Name,Email,BirthDate,BaseSalary,DepartmentId)"+
+									   	"VALUES "+
+									    "(?,?,?,?,?)",Statement.RETURN_GENERATED_KEYS);
+			
+			ps.setString(1, sl.getName());
+			ps.setString(2, sl.getEmail());
+			ps.setDate(3, new java.sql.Date(sl.getBirthDate().getTime()));;
+			ps.setDouble(4, sl.getBaseSalary());
+			ps.setInt(5, sl.getDepartment().getId());
+			
+			int result = ps.executeUpdate();
+			System.out.println("!Done row "+result);
+			if(result > 0) {
+				ResultSet st = ps.getGeneratedKeys();
+				if(st.next()) {
+					int sa = st.getInt(1);
+					System.out.println("!Done id = "+sa);
+					sl.setId(sa);
+				}
+			}
+			else {
+				System.out.println("!No row affect");
+			}
+			
+		}
+		catch(SQLException e) {
+			throw new DbException(e.getMessage());
+		}
+		finally {
+			DB.closeStatement(ps);
+		}
 	}
 	@Override
 	public void update(Seller sl) {
