@@ -5,7 +5,7 @@
 
 
 ## Modelo de Dominio
-     ![Modelo Conceitual](https://github.com/TiagoFerreirago/arqwork/blob/main/Captura%20de%20tela%202024-02-06%20155111.png)
+![Modelo Conceitual](https://github.com/TiagoFerreirago/arqwork/blob/main/Captura%20de%20tela%202024-02-06%20155111.png)
 ![Modelo Conceitual](https://github.com/TiagoFerreirago/arqwork/blob/main/Captura%20de%20tela%202024-02-06%20155142.png)
 
 # Tecnologias utilizadas
